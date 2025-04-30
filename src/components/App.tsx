@@ -5,10 +5,6 @@ import React from 'react'
 
 import '../styles/main.css'
 
-interface PdfSelection {
-    
-}
-
 function App() {
     //LATER: default these from local storage
     const [fname, setFirstName] = useState<string>("");
@@ -98,9 +94,9 @@ function App() {
             <Logo/>
             
             <div className='form-body'>
-                <form className='form-body'>
-                    <div className='basic-info'>
-                        <label className='form-field'>
+                <form className=''>
+                    <div className='container basic-info-container'>
+                        <label className=''>
                             First Name:
                             <input 
                                 type="text" 
@@ -111,7 +107,7 @@ function App() {
                             >
                             </input>
                         </label>
-                        <label className='form-field'>
+                        <label className=''>
                             Last Name:
                             <input 
                                 type="text" 
@@ -122,7 +118,7 @@ function App() {
                             >
                             </input>
                         </label>
-                        <label className='form-field'>
+                        <label className=''>
                             Email:
                             <input 
                                 type="text" 
@@ -133,7 +129,7 @@ function App() {
                             >
                             </input>
                         </label>
-                        <label className='form-field'>
+                        <label className=''>
                             Phone Number:
                             <input 
                                 type="text" 
@@ -151,40 +147,46 @@ function App() {
                             </input>
                         </label>
                     </div>
-                    <div className='form-field'>
+                    <div className='container resume-selection-container'>
                         RESUME SELCTOR GOES HERE
                         
                     </div>
-                    <label className='form-field'>
-                        Job description link: 
-                        <input 
-                            type="text" 
-                            name="joblink"
-                            placeholder='Link to job page goes here...'
-                            value={jobLink}
-                            onChange={(e) => setJobLink(e.target.value)}
-                        >
-                        </input>
-                        <button
-                            onClick={(e) => findJobDescription(e, jobLink)}
-                        >
-                            Retrieve job description
-                        </button>
-                    </label>
-                    <label className='form-field'>
-                        Job description: 
-                        <textarea 
-                            name="jobdesc"
-                            value={jobDesc}
-                            placeholder='...or paste job description here'
-                            onChange={(e) => setJobDescription(e.target.value)}
-                        >
-                        </textarea>
-                    </label>
-                    <div className='tones-box'>
-                        <div className='form-field'>Writing style</div>
+                    <div className='container job-page-tools-container'>
+                        <label className='field-container'>
+                            <div className='field-content'>
+                                Job description link:
+                            </div> 
+                            <input 
+                                type="text" 
+                                name="joblink"
+                                placeholder='Link to job page goes here...'
+                                className='field-content'
+                                value={jobLink}
+                                onChange={(e) => setJobLink(e.target.value)}
+                            >
+                            </input>
+                            <button
+                                className='btn'
+                                onClick={(e) => findJobDescription(e, jobLink)}
+                            >
+                                Retrieve job description
+                            </button>
+                        </label>
+                        <label className='edit-job-text-container'>
+                            Job description: 
+                            <textarea 
+                                name="jobdesc"
+                                value={jobDesc}
+                                placeholder='...or paste job description here'
+                                onChange={(e) => setJobDescription(e.target.value)}
+                            >
+                            </textarea>
+                        </label>
+                    </div>
+                    <div className='container writing-style-container'>
+                        <h2 className=''>Writing style</h2>
                         {toneOptions.map(option => (
-                            <label key={option} className='form-field'>
+                            <label key={option} className=''>
                                 <input 
                                     type='checkbox'
                                     checked={tonesSelected.has(option)}
@@ -195,7 +197,7 @@ function App() {
                             </label>
                         ))}
                     </div>
-                    <label className='form-field'>
+                    <label className='container added-notes-container'>
                         Added notes:
                         <input
                             type="text"
@@ -207,17 +209,17 @@ function App() {
                         </input>
                     </label>
                     <input 
-                        className='form-field'
+                        className='btn form-action-button'
                         type="submit" 
                         value="Generate cover letter" 
                         onClick={(e) => generateCoverLetter(e)}
                     />
                 </form> 
                 <form className='form-body'>
-                    <label className='form-field'>
+                    <label className='container edit-cover-letter-container'>
                         Edit cover letter result. We recommend removing em dashes--these, for example.
                         <textarea
-                            className='form-field'
+                            className=''
                             name="cover-letter-contenets"
                             value={coverLetterContent}
                             onChange={(e) => setCoverLetter(e.target.value)}
@@ -225,7 +227,7 @@ function App() {
                         </textarea>
                     </label>
                     <input
-                        className='form-field'
+                        className='btn form-action-button'
                         type="submit"
                         value="Export as PDF"
                         onClick={(e)=>exportCoverLetter(e)}
