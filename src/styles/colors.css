@@ -1,0 +1,24 @@
+:root {
+    /*PERHAPS ASSIGN COLORS, eg. --color-text: var(--color-grey-10);*/
+
+    /*basis of color palette*/
+    --color-primary: #FFFFF0;
+    --color-secondary: #353839;
+    --color-accent-1: #8a86d5;
+    --color-accent-2: #ebd262;
+
+    /*text colors*/
+    --color-text-light: #FFFFF0;
+    --color-text-dark: #353839;
+    --color-text-grey: #878787;
+
+    /*other colors*/
+    --color-error: #c61717;
+    --color-success: #17c63a;
+    --color-warning: #c61717;
+
+    /*variants*/
+
+    /*gradients*/
+
+}

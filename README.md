@@ -1,5 +1,5 @@
 # Cover Me
 
-Web app cover letter generator.
+Web-app cover letter generator.
 
 

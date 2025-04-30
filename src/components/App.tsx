@@ -1,8 +1,9 @@
 import { ButtonHTMLAttributes, useState } from 'react'
-import { useEffect } from 'react';
-import React from 'react';
-import { Plus } from 'lucide-react';
-import './App.css'
+import { useEffect } from 'react'
+import Logo from './logo.tsx'
+import React from 'react'
+
+import '../styles/main.css'
 
 interface PdfSelection {
     
@@ -93,8 +94,9 @@ function App() {
     }
   
     return (
-        <>
-            <h1>CoverMe</h1>
+        <div className='app-container'>
+            <Logo/>
+            
             <div className='form-body'>
                 <form className='form-body'>
                     <div className='basic-info'>
@@ -230,7 +232,7 @@ function App() {
                     ></input>
                 </form>
             </div>
-        </>
+        </div>
     )
 }
 

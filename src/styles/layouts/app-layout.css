@@ -1,0 +1,22 @@
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.app-container{
+    display: block;
+    margin: auto;
+
+    width: 80vw;
+    max-width: 50rem;
+    min-width: 30rem;
+}
+
+.form-body{
+    display: flex;
+    flex-direction: column;
+}
+  
+.form-field{
+    margin: 1rem;
+}
