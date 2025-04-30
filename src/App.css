@@ -1,0 +1,8 @@
+.form-body{
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field{
+  margin: 1rem;
+}
