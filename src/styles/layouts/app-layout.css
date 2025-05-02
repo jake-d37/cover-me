@@ -10,6 +10,8 @@ body {
     width: 80vw;
     max-width: 50rem;
     min-width: 30rem;
+
+    margin-bottom: 10rem;
 }
 
 .form-body{
@@ -24,13 +26,15 @@ body {
 .container {
     display: flex;
     flex-direction: column;
-    margin: 1rem 0 1rem 0;
+    margin: 2rem 0 2rem 0;
+
+    
 }
 
 .field-container {
     display: flex;
     flex-direction: row;
-    margin: 1rem 0 1rem 0;
+    margin: 0.25rem 0 0.25rem 0;
 }
 
 .field-content {
@@ -42,11 +46,30 @@ body {
 }
 
 .resume-selection-container {
-
+    display: flex;
+    flex-direction: column;
 }
 
 .job-page-tools-container {
+    
+}
 
+.job-link-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.job-link-input-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    margin-bottom: 1rem;
+}
+
+.job-link-input {
+    height: 100%;
+    width: 50%;
 }
 
 .edit-job-text-container {
@@ -58,6 +81,11 @@ body {
 
 }
 
+.writing-style-header {
+    margin: 0;
+    margin-bottom: 0.5rem;
+}
+
 .added-notes-container {
 
 }
@@ -67,11 +95,20 @@ body {
 }
 
 .form-action {
-
+    height: 3rem;
+    width: 100%;
 }
 
 .btn {
     background-color: light-dark(var(--color-accent-1), var(--color-accent-1));
     color: var(--color-text-light);
+
+    transition: background-color 0.1s ease-in-out;
 }
+
+.btn:hover {
+    background-color: var(--color-accent-hover);
+}
+
+
 

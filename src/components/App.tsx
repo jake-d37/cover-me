@@ -2,6 +2,7 @@ import { ButtonHTMLAttributes, useState } from 'react'
 import { useEffect } from 'react'
 import Logo from './logo.tsx'
 import React from 'react'
+import PdfParser from './pdf-parser.tsx'
 
 import '../styles/main.css'
 
@@ -61,8 +62,6 @@ function App() {
         });
     };
 
-    
-
     const findJobDescription = (e: React.MouseEvent<HTMLButtonElement>, link: string) => {
         e.stopPropagation();
         e.preventDefault();
@@ -96,45 +95,49 @@ function App() {
             <div className='form-body'>
                 <form className=''>
                     <div className='container basic-info-container'>
-                        <label className=''>
-                            First Name:
+                        <label className='field-container'>
+                            <div className='field-content'>First Name:</div>
                             <input 
                                 type="text" 
                                 name="fname"
                                 placeholder='Jane'
+                                size={50}
                                 value={fname}
                                 onChange={(e) => setFirstName(e.target.value)}
                             >
                             </input>
                         </label>
-                        <label className=''>
-                            Last Name:
+                        <label className='field-container'>
+                            <div className='field-content'>Last Name:</div>
                             <input 
                                 type="text" 
                                 name="lname"
                                 placeholder='Citizen'
+                                size={50}
                                 value={lname}
                                 onChange={(e) => setLastName(e.target.value)}
                             >
                             </input>
                         </label>
-                        <label className=''>
-                            Email:
+                        <label className='field-container'>
+                            <div className='field-content'>Email:</div>
                             <input 
                                 type="text" 
                                 name="email"
                                 placeholder='janecitizen@email.com'
+                                size={50}
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             >
                             </input>
                         </label>
-                        <label className=''>
-                            Phone Number:
+                        <label className='field-container'>
+                            <div className='field-content'>Phone Number:</div>
                             <input 
                                 type="text" 
                                 name="phone"
                                 placeholder='0400 123 456'
+                                size={50}
                                 value={phone}
                                 onChange={(e) => {
                                     const value = e.target.value;
@@ -148,29 +151,31 @@ function App() {
                         </label>
                     </div>
                     <div className='container resume-selection-container'>
-                        RESUME SELCTOR GOES HERE
-                        
+                        <div>Choose a resume to tailor your cover letter to</div>
+                        <PdfParser></PdfParser>
                     </div>
                     <div className='container job-page-tools-container'>
-                        <label className='field-container'>
+                        <label className='field-container job-link-container'>
                             <div className='field-content'>
                                 Job description link:
-                            </div> 
-                            <input 
-                                type="text" 
-                                name="joblink"
-                                placeholder='Link to job page goes here...'
-                                className='field-content'
-                                value={jobLink}
-                                onChange={(e) => setJobLink(e.target.value)}
-                            >
-                            </input>
-                            <button
-                                className='btn'
-                                onClick={(e) => findJobDescription(e, jobLink)}
-                            >
-                                Retrieve job description
+                            </div>
+                            <div className='job-link-input-container'>
+                                <input 
+                                    type="text" 
+                                    name="joblink"
+                                    placeholder='Link to job page goes here...'
+                                    className='field-content job-link-input'
+                                    value={jobLink}
+                                    onChange={(e) => setJobLink(e.target.value)}
+                                >
+                                </input>
+                                <button
+                                    className='btn'
+                                    onClick={(e) => findJobDescription(e, jobLink)}
+                                >
+                                    Retrieve job description
                             </button>
+                            </div> 
                         </label>
                         <label className='edit-job-text-container'>
                             Job description: 
@@ -178,13 +183,14 @@ function App() {
                                 name="jobdesc"
                                 value={jobDesc}
                                 placeholder='...or paste job description here'
+                                rows={15}
                                 onChange={(e) => setJobDescription(e.target.value)}
                             >
                             </textarea>
                         </label>
                     </div>
                     <div className='container writing-style-container'>
-                        <h2 className=''>Writing style</h2>
+                        <h2 className='writing-style-header'>Writing style</h2>
                         {toneOptions.map(option => (
                             <label key={option} className=''>
                                 <input 
@@ -209,7 +215,7 @@ function App() {
                         </input>
                     </label>
                     <input 
-                        className='btn form-action-button'
+                        className='btn form-action'
                         type="submit" 
                         value="Generate cover letter" 
                         onClick={(e) => generateCoverLetter(e)}
@@ -222,12 +228,13 @@ function App() {
                             className=''
                             name="cover-letter-contenets"
                             value={coverLetterContent}
+                            rows={15}
                             onChange={(e) => setCoverLetter(e.target.value)}
                         >
                         </textarea>
                     </label>
                     <input
-                        className='btn form-action-button'
+                        className='btn form-action'
                         type="submit"
                         value="Export as PDF"
                         onClick={(e)=>exportCoverLetter(e)}
