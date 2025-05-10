@@ -110,5 +110,14 @@ body {
     background-color: var(--color-accent-hover);
 }
 
+input {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+}
+
+textarea {
+    padding: 0.5rem;
+}
+
 
 

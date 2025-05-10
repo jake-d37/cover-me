@@ -3,20 +3,24 @@ import { useEffect } from 'react'
 import Logo from './logo.tsx'
 import React from 'react'
 import PdfParser from './pdf-parser.tsx'
+import generatePrompt, { PromptDetails } from './generate-prompt.tsx'
+import { getStringFromPdf } from './pdf-parser.tsx'
 
 import '../styles/main.css'
 
 function App() {
+
+    //CONSIDER CACHING A PROMPT WITH RESUMES, BASIC INFO, WRITING STYLE FOR CHEAPER AI CALLS
     //LATER: default these from local storage
-    const [fname, setFirstName] = useState<string>("");
-    const [lname, setLastName] = useState<string>("");
+    const [lname, setName] = useState<string>("");
     const [email, setEmail] = useState<string>("");
     const [phone, setPhoneNumber] = useState<string>("");
 
     //LATER: default this too
-    const [resume, setResume] = useState(); //PDF type when I put in the library
+    const [resume, setResume] = useState<File|undefined>(undefined);
+    const [writingStyle, setWritingStyle] = useState<File|undefined>(undefined);
+    const fileCharLimit:number = 750;
 
-    const [jobLink, setJobLink] = useState<string>("");
     const [jobDesc, setJobDescription] = useState<string>("");
 
     const toneOptions: readonly string[] = [
@@ -44,10 +48,19 @@ function App() {
 
     const [coverLetterContent, setCoverLetter] = useState<string>("");
 
-    //just to check if its working
-    useEffect(()=> {
-        console.log(fname);
-    }, [fname]);
+    const handleFileResume = (file: File|undefined) => {
+        setResume(file);
+        console.log(file);
+    }
+
+    const handleFileWritingStyle = (file: File|undefined) => {
+        setWritingStyle(file);
+        console.log(file);
+    }
+
+    const handleLocalStorage = (file: File|undefined) => {
+        //placeholder
+    }
 
     const handleToneSelection = (tone: string) => {
         setToneSelected(prev => {
@@ -62,24 +75,33 @@ function App() {
         });
     };
 
-    const findJobDescription = (e: React.MouseEvent<HTMLButtonElement>, link: string) => {
+    const generateCoverLetter = async (e: React.MouseEvent<HTMLInputElement>) => {
         e.stopPropagation();
         e.preventDefault();
 
-        //check its public/legal to scrape
+        //parse resume and writing styles files
+        const resumeString = await getStringFromPdf(resume, undefined);
+        const writingStyleString = await getStringFromPdf(writingStyle, fileCharLimit);
+        
+        //set up details for prompt generator
+        const details: PromptDetails = {
+            name: lname,
+            email: email,
+            phoneNumber: phone,
+            resume: resumeString,
+            writingStyle: writingStyleString,
+            jobDesc: jobDesc,
+            tones: tonesSelected,
+            notes: notes
+        }
 
-        //scrape
-    };
+        //generate prompt
+        const prompt = await generatePrompt(details);
 
-    const generateCoverLetter = (e: React.MouseEvent<HTMLInputElement>) => {
-        e.stopPropagation();
-        e.preventDefault();
-        //concatenate everything
-
-        //give to LLM
+        //send prompt to LLM for response
 
         //return result
-        setCoverLetter("Whatever DeepSeek said");
+        setCoverLetter(prompt); //CHANGE THIS TO THE RESPONSE FROM THE LLM LATER
     }
 
     const exportCoverLetter = (e: React.MouseEvent<HTMLInputElement>) => {
@@ -90,32 +112,20 @@ function App() {
   
     return (
         <div className='app-container'>
-            <Logo/>
+            
             
             <div className='form-body'>
                 <form className=''>
                     <div className='container basic-info-container'>
                         <label className='field-container'>
-                            <div className='field-content'>First Name:</div>
+                            <div className='field-content'>Name:</div>
                             <input 
                                 type="text" 
-                                name="fname"
-                                placeholder='Jane'
-                                size={50}
-                                value={fname}
-                                onChange={(e) => setFirstName(e.target.value)}
-                            >
-                            </input>
-                        </label>
-                        <label className='field-container'>
-                            <div className='field-content'>Last Name:</div>
-                            <input 
-                                type="text" 
-                                name="lname"
-                                placeholder='Citizen'
+                                name="name"
+                                placeholder='Jane Citizen'
                                 size={50}
                                 value={lname}
-                                onChange={(e) => setLastName(e.target.value)}
+                                onChange={(e) => setName(e.target.value)}
                             >
                             </input>
                         </label>
@@ -152,37 +162,27 @@ function App() {
                     </div>
                     <div className='container resume-selection-container'>
                         <div>Choose a resume to tailor your cover letter to</div>
-                        <PdfParser></PdfParser>
+                        <PdfParser 
+                            handleFile={handleFileResume} 
+                            limit={undefined}
+                            handleLocalStorage={handleLocalStorage}
+                        ></PdfParser>
+                    </div>
+                    <div className='container resume-selection-container'>
+                        <div>Choose a sample of your writing for the cover letter to replicate</div>
+                        <PdfParser 
+                            handleFile={handleFileWritingStyle}
+                            limit={fileCharLimit}
+                            handleLocalStorage={handleLocalStorage}
+                        ></PdfParser>
                     </div>
                     <div className='container job-page-tools-container'>
-                        <label className='field-container job-link-container'>
-                            <div className='field-content'>
-                                Job description link:
-                            </div>
-                            <div className='job-link-input-container'>
-                                <input 
-                                    type="text" 
-                                    name="joblink"
-                                    placeholder='Link to job page goes here...'
-                                    className='field-content job-link-input'
-                                    value={jobLink}
-                                    onChange={(e) => setJobLink(e.target.value)}
-                                >
-                                </input>
-                                <button
-                                    className='btn'
-                                    onClick={(e) => findJobDescription(e, jobLink)}
-                                >
-                                    Retrieve job description
-                            </button>
-                            </div> 
-                        </label>
                         <label className='edit-job-text-container'>
                             Job description: 
                             <textarea 
                                 name="jobdesc"
                                 value={jobDesc}
-                                placeholder='...or paste job description here'
+                                placeholder='Paste job description here.'
                                 rows={15}
                                 onChange={(e) => setJobDescription(e.target.value)}
                             >
@@ -209,7 +209,7 @@ function App() {
                             type="text"
                             name="notes"
                             value={notes}
-                            placeholder='Any other requests here, in natural language'
+                            placeholder='Note any other requests here in natural language'
                             onChange={(e) => setNotes(e.target.value)}
                         >
                         </input>
